@@ -16,14 +16,12 @@ void handleReadCommands(char *buffer) {
     printf("\tReading Temperature...\n");
     // Preeenche o buffer com zeros
     memset(buffer, 0, sizeof(buffer));
-    
-    sprintf(buffer,"%s%d", "t", getTemperatureReading());
+
+    sprintf(buffer, "%s%03d", "t", getTemperatureReading());
   }
 }
 
-int getTemperatureReading() {
-  return rand() % 35;
-}
+int getTemperatureReading() { return rand() % 35; }
 
 /*
 O tamanho max. do datagrama UDP é 65535 bytes, que é o valor máximo
@@ -103,7 +101,7 @@ int main() {
            inet_ntoa(saddr.sin_addr), htons(saddr.sin_port), buffer);
 
     if (buffer[0] == 'r') {
-        handleReadCommands(buffer);
+      handleReadCommands(buffer);
     }
 
     printf("\tEnviando resposta...\n");
