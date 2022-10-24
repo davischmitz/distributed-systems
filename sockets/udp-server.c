@@ -12,11 +12,9 @@
 #define MAX_TEMP 45
 #define MIN_TEMP -45
 
-void handleReadCommands(char *buffer)
-{
+void handleReadCommands(char *buffer) {
   printf("\tHandling Read Command...\n");
-  if (buffer[1] == 't')
-  {
+  if (buffer[1] == 't') {
     printf("\tReading Temperature...\n");
     // Preeenche o buffer com zeros
     memset(buffer, 0, sizeof(buffer));
@@ -25,21 +23,17 @@ void handleReadCommands(char *buffer)
   }
 }
 
-int getTemperatureReading()
-{
+int getTemperatureReading() { 
   return MIN_TEMP + rand() / (RAND_MAX / (MAX_TEMP - MIN_TEMP + 1) + 1);
 }
 
-void handleLEDCommands(char *buffer)
-{
+void handleLEDCommands(char *buffer) {
   printf("\tHandling LED Command...\n");
-  if (buffer[1] == 'g')
-  {
+  if (buffer[1] == 'g') {
     printf("\tTurning red LED off\n");
     printf("\tTurning green LED on\n");
   }
-  if (buffer[1] == 'r')
-  {
+  if (buffer[1] == 'r') {
     printf("\tTurning green LED off\n");
     printf("\tTurning red LED on\n");
   }
@@ -51,8 +45,7 @@ representado pelos dois bytes destinados ao tamanho do datagrama UDP.
 Descontados os cabeçalhos do UDP e do IP temos 65507 bytes.
 */
 
-int main()
-{
+int main() {
   int sock, status, socklen;
   unsigned char buffer[MAXBUFSIZE];
   struct sockaddr_in saddr;
@@ -69,8 +62,7 @@ int main()
   IPPROTO_IP: protocolo da camada de rede
   */
   sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
-  if (sock < 0)
-  {
+  if (sock < 0) {
     printf("Erro socket\n");
     exit(0);
   }
@@ -93,8 +85,7 @@ int main()
   saddr.sin_addr.s_addr = htonl(INADDR_ANY);
   status = bind(sock, (struct sockaddr *)&saddr, sizeof(struct sockaddr_in));
 
-  if (status < 0)
-  {
+  if (status < 0) {
     printf("Erro bind\n");
     exit(0);
   }
@@ -106,8 +97,7 @@ int main()
   printf("\t\t\t Servidor UDP\n");
   printf("\tAguardando...\n");
 
-  while (1)
-  {
+  while (1) {
     // Preeenche o buffer com zeros
     memset(&buffer, 0, sizeof(buffer));
 
@@ -126,12 +116,11 @@ int main()
     printf("\t-> Dados recebidos do cliente com IP: %s e Porta: %d\n\t%s\n",
            inet_ntoa(saddr.sin_addr), htons(saddr.sin_port), buffer);
 
-    if (buffer[0] == 'r')
-    {
+    if (buffer[0] == 'r') {
       handleReadCommands(buffer);
-
+      
       printf("\tEnviando resposta...\n");
-
+  
       /*
       Descritor: sock
       Onde estão os dados a serem enviados: buffer
@@ -144,10 +133,10 @@ int main()
                       socklen);
     }
 
-    if (buffer[0] == 'l')
-    {
+    if (buffer[0] == 'l') {
       handleLEDCommands(buffer);
     }
+
   }
 
   return 0;
