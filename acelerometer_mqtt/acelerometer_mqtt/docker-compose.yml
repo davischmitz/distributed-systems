@@ -1,0 +1,18 @@
+version: "3.7"
+services:
+  grafana:
+    image: grafana/grafana-enterprise
+    volumes:
+      - ./grafana-storage:/var/lib/grafana
+    environment:
+      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=grafana-mqtt-datasource
+    ports:
+      - 3000:3000
+  mosquitto:
+    image: eclipse-mosquitto
+    restart: always
+    volumes:
+      - ./mosquitto:/mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001
